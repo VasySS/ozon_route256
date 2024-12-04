@@ -1,0 +1,510 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Пункт выдачи заказов",
+    "description": "Сервис, позволяющий выдавать заказы и принимать возвраты",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "PVZService"
+    }
+  ],
+  "host": "localhost:7001",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/orders": {
+      "get": {
+        "summary": "Получение списка заказов",
+        "description": "Получение списка заказов пользователя",
+        "operationId": "PVZService_GetOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pvzGetOrdersResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "lastN",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "pvzOnly",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "PVZService"
+        ],
+        "security": [
+          {
+            "api-token": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Создание заказа",
+        "description": "Создание нового заказа пользователя",
+        "operationId": "PVZService_CreateOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pvzCreateOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PVZService"
+        ],
+        "security": [
+          {
+            "api-token": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Выдача заказов",
+        "description": "Выдача заказов пользователю",
+        "operationId": "PVZService_GiveOrders",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/pvzGiveOrdersRequest"
+            }
+          }
+        ],
+        "tags": [
+          "PVZService"
+        ],
+        "security": [
+          {
+            "api-token": []
+          }
+        ]
+      }
+    },
+    "/api/v1/returns": {
+      "get": {
+        "summary": "Получение списка возвратов",
+        "description": "Список возвратов для заказов в ПВЗ",
+        "operationId": "PVZService_GetOrderReturns",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pvzGetOrderReturnsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "PVZService"
+        ],
+        "security": [
+          {
+            "api-token": []
+          }
+        ]
+      }
+    },
+    "/api/v1/returns/{orderId}": {
+      "post": {
+        "summary": "Создание возврата",
+        "description": "Создание нового возврата для заказа пользователя",
+        "operationId": "PVZService_CreateOrderReturn",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PVZServiceCreateOrderReturnBody"
+            }
+          }
+        ],
+        "tags": [
+          "PVZService"
+        ],
+        "security": [
+          {
+            "api-token": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Выдача возврата курьеру",
+        "description": "Выдача возвращённого пользователем заказа курьеру",
+        "operationId": "PVZService_GiveOrderToCourier",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PVZServiceGiveOrderToCourierBody"
+            }
+          }
+        ],
+        "tags": [
+          "PVZService"
+        ],
+        "security": [
+          {
+            "api-token": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users": {
+      "post": {
+        "summary": "Регистрация пользователя",
+        "description": "Выдача JWT токена для пользователя по ID",
+        "operationId": "PVZService_RegisterUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pvzRegisterResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "PVZService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "PVZServiceCreateOrderReturnBody": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "uint64"
+        }
+      },
+      "required": [
+        "userId"
+      ]
+    },
+    "PVZServiceGiveOrderToCourierBody": {
+      "type": "object"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "pvzCreateOrderRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "userId": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "expiryDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "weight": {
+          "type": "number",
+          "format": "float"
+        },
+        "price": {
+          "type": "number",
+          "format": "float"
+        },
+        "packagingType": {
+          "$ref": "#/definitions/pvzPackagingType"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "expiryDate",
+        "weight",
+        "price",
+        "packagingType"
+      ]
+    },
+    "pvzGetOrderReturnsResponse": {
+      "type": "object",
+      "properties": {
+        "orderReturns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/pvzOrderReturn"
+          }
+        }
+      }
+    },
+    "pvzGetOrdersResponse": {
+      "type": "object",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/pvzOrder"
+          }
+        }
+      }
+    },
+    "pvzGiveOrdersRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          }
+        }
+      },
+      "required": [
+        "id"
+      ]
+    },
+    "pvzOrder": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "expiryDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "receiveDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "weight": {
+          "type": "number",
+          "format": "float"
+        },
+        "price": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "pvzOrderReturn": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "orderId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "pvzPackagingType": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "WRAP",
+        "BAG",
+        "BOX"
+      ],
+      "default": "UNKNOWN"
+    },
+    "pvzRegisterResponse": {
+      "type": "object",
+      "properties": {
+        "apiToken": {
+          "type": "string"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api-token": {
+      "type": "apiKey",
+      "description": "API токен для авторизации",
+      "name": "X-Api-Token",
+      "in": "header"
+    }
+  }
+}

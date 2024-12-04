@@ -1,0 +1,7 @@
+build
+!build/dev
+godepgraph.png
+vendor.protogen
+bin
+.vscode
+data

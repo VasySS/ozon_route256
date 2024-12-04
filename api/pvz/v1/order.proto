@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package pvz;
+option go_package = "pkg/pvz";
+
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+import "pvz/v1/packaging.proto";
+
+message Order {
+    int64 id = 1;
+    int64 user_id = 2;
+    google.protobuf.Timestamp expiry_date = 3;
+    google.protobuf.Timestamp receive_date = 4;
+    float weight = 5;
+    float price = 6;
+}
+
+message CreateOrderRequest {
+    uint64 id = 1 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+    uint64 user_id = 2 [
+        (google.api.field_behavior) = REQUIRED    
+    ];
+    google.protobuf.Timestamp expiry_date = 3 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+    float weight = 4 [
+        (validate.rules).float.gte = 1,
+        (google.api.field_behavior) = REQUIRED
+    ];
+    float price = 5 [
+        (validate.rules).float.gte = 1,
+        (google.api.field_behavior) = REQUIRED
+    ];
+    PackagingType packaging_type = 6 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message GiveOrdersRequest {
+    repeated uint64 id = 1 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message GetOrdersRequest {
+    uint64 user_id = 1 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+    uint64 last_n = 2 [
+        (validate.rules).uint64.gte = 1,
+        (google.api.field_behavior) = OPTIONAL
+    ];
+    bool pvz_only = 3 [
+        (google.api.field_behavior) = OPTIONAL
+    ];
+}
+
+message GetOrdersResponse {
+    repeated Order orders = 1;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package pvz;
+option go_package = "pkg/pvz";
+
+import "google/api/field_behavior.proto";
+
+message RegisterRequest {
+    uint64 user_id = 1 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message RegisterResponse {
+    string api_token = 1;
+}

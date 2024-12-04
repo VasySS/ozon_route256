@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package pvz;
+option go_package = "pkg/pvz";
+
+enum PackagingType {
+    UNKNOWN = 0;
+    WRAP = 1;
+    BAG = 2;
+    BOX = 3;
+}

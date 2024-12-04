@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package pvz;
+option go_package = "pkg/pvz";
+
+import "validate/validate.proto";
+import "google/api/field_behavior.proto";
+
+message OrderReturn {
+    int64 user_id = 1;
+    int64 order_id = 2;
+}
+
+message CreateOrderReturnRequest {
+    uint64 user_id = 1 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+    uint64 order_id = 2 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message GiveOrderToCourierRequest {
+    uint64 order_id = 1 [
+        (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message GetOrderReturnsRequest {
+    int64 page = 1 [
+        (validate.rules).int64.gte = 1,
+        (google.api.field_behavior) = REQUIRED
+    ];
+    int64 page_size = 2 [
+        (validate.rules).int64.gte = 1,
+        (google.api.field_behavior) = REQUIRED
+    ];
+}
+
+message GetOrderReturnsResponse {
+    repeated OrderReturn order_returns = 1;
+}
